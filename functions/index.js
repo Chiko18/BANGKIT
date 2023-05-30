@@ -75,7 +75,7 @@ const isError = (error) => {
 };
 
 // Signup Email
-app.post("/signup/email", async (req, res) => {
+app.post("/signup", async (req, res) => {
 	const { name, email, password, confirmPassword, address } = req.body;
 	const newUser = {
 		name,
@@ -90,11 +90,11 @@ app.post("/signup/email", async (req, res) => {
 		isEmpty(email)
 			? (errors.email = "Must not be empty")
 			: !isEmail(email) && (errors.email = "Must be a valid email address");
-		!isPassword(password)
+		isEmpty(password)
+			? (errors.password = "Must not be empty")
+			: !isPassword(password)
 			? (errors.password =
 					"Password at least 8 characters and contains uppercase, lowercase, and number")
-			: isEmpty(password)
-			? (errors.password = "Must not be empty")
 			: password !== confirmPassword &&
 			  (errors.confirmPassword = "Passwords must match");
 		isEmpty(name) && (errors.name = "Must not be empty");
