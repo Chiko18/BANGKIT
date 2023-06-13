@@ -220,6 +220,7 @@ app.get("/profile", authenticateToken, async (req, res) => {
 		const user = {
 			uid,
 			email,
+			address: req.user.address,
 			emailVerified,
 			displayName,
 			isAnonymous,
