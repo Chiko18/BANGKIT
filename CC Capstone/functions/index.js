@@ -16,7 +16,6 @@ const {
 	sendEmailVerification,
 	updateProfile,
 } = require("firebase/auth");
-const { user } = require("firebase-functions/v1/auth");
 
 const firebaseConfig = {
 	apiKey: "AIzaSyClDXcqkOc3F_6eG5_Hc7E6lsUjvFpVDgQ",
