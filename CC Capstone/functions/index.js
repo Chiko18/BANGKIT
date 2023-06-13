@@ -12,6 +12,8 @@ const {
 	getAuth,
 	signInWithEmailAndPassword,
 	createUserWithEmailAndPassword,
+	sendPasswordResetEmail,
+	sendEmailVerification,
 } = require("firebase/auth");
 
 const firebaseConfig = {
@@ -31,7 +33,10 @@ const auth = admin.auth();
 // AuthToken
 
 const authenticateToken = async (req, res, next) => {
-	const idToken = req.headers.authorization.split("Bearer ")[1];
+	if (!req.headers.cookie)
+		return res.status(401).json({ message: "Login first" });
+
+	const idToken = req.headers.cookie.split("authToken=")[1];
 	!idToken &&
 		res.status(401).json({
 			message: "Token not found",
@@ -157,9 +162,7 @@ app.post("/login", async (req, res) => {
 			httpOnly: false,
 		};
 
-		res.cookie("authToken", token, cookieOptions);
-
-		res.status(201).json({ token });
+		res.status(201).cookie("authToken", token, cookieOptions).json({ token });
 	} catch (error) {
 		error.message === "Firebase: Error (auth/wrong-password)."
 			? res.status(403).json({ message: "Wrong password, please try again" })
@@ -168,11 +171,41 @@ app.post("/login", async (req, res) => {
 });
 
 // Logout
-app.post("/logout", (req, res) => {
-	res.clearCookie("authToken");
+app.post("/logout", authenticateToken, (req, res) => {
+	res
+		.status(200)
+		.clearCookie("authToken")
+		.json({ message: "Logout successfully!" });
+});
 
-	// res.redirect("/")
-	res.status(200).json({ message: "Logout sukses!" });
+// reset-password
+app.post("/reset-password", authenticateToken, async (req, res) => {
+	const email = req.user.email;
+	try {
+		await sendPasswordResetEmail(getAuth(), email);
+		res.status(202).clearCookie("authToken").json({ message: "Email sent!" });
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
+});
+
+// verify-email
+app.post("/verify-email", authenticateToken, async (req, res) => {
+	try {
+		let errors = {};
+		const { emailVerified } = await getAuth().currentUser;
+
+		if (!emailVerified) {
+			await sendEmailVerification(getAuth().currentUser);
+
+			res.status(202).json({ message: "Email sent!" });
+		} else {
+			errors.email = "Email have been verified";
+		}
+		Object.keys(errors).length > 0 && res.status(400).json(errors);
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
 });
 
 // Test
@@ -183,9 +216,11 @@ app.get("/", authenticateToken, async (req, res) => {
 		getUser.forEach((doc) => {
 			user.push(doc.data());
 		});
+		const userLogin = await getAuth().currentUser;
 		res.status(200).json({
 			user,
-			message: `Hello ${req.user.name}`,
+			message: `Hello`,
+			userLogin,
 		});
 	} catch (error) {
 		res.status(500).json({ message: error.message });
@@ -193,5 +228,3 @@ app.get("/", authenticateToken, async (req, res) => {
 });
 
 exports.api = onRequest(app);
-
-// -"/signup/phone"
