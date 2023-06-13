@@ -14,7 +14,9 @@ const {
 	createUserWithEmailAndPassword,
 	sendPasswordResetEmail,
 	sendEmailVerification,
+	updateProfile,
 } = require("firebase/auth");
+const { user } = require("firebase-functions/v1/auth");
 
 const firebaseConfig = {
 	apiKey: "AIzaSyClDXcqkOc3F_6eG5_Hc7E6lsUjvFpVDgQ",
@@ -31,16 +33,13 @@ const db = admin.firestore();
 const auth = admin.auth();
 
 // AuthToken
-
 const authenticateToken = async (req, res, next) => {
-	if (!req.headers.cookie)
-		return res.status(401).json({ message: "Login first" });
-
-	const idToken = req.headers.cookie.split("authToken=")[1];
-	!idToken &&
-		res.status(401).json({
-			message: "Token not found",
-		});
+	let idToken =
+		req.headers.authorization && req.headers.authorization.startsWith("Bearer ")
+			? req.headers.authorization.split("Bearer ")[1]
+			: res.status(401).json({
+					message: "Unauthorized",
+			  });
 
 	try {
 		const decodedToken = await auth.verifyIdToken(idToken);
@@ -50,7 +49,7 @@ const authenticateToken = async (req, res, next) => {
 			.where("uid", "==", req.user.uid)
 			.limit(1)
 			.get();
-		req.user.name = userName.docs[0].data().name;
+		req.user = userName.docs[0].data();
 		next();
 	} catch (error) {
 		res.status(401).json({
@@ -132,6 +131,11 @@ app.post("/signup", async (req, res) => {
 				createdAt: newUser.createdAt,
 			};
 			await db.doc(`/users/${email}`).set(userCredentials);
+			await updateProfile(getAuth().currentUser, {
+				displayName: newUser.name,
+				photoURL:
+					"https://storage.googleapis.com/my-first-project-be65d.appspot.com/avatar.png",
+			});
 
 			return res.status(201).json({ token });
 		}
@@ -178,7 +182,7 @@ app.post("/logout", authenticateToken, (req, res) => {
 		.json({ message: "Logout successfully!" });
 });
 
-// reset-password
+// Reset Password
 app.post("/reset-password", authenticateToken, async (req, res) => {
 	const email = req.user.email;
 	try {
@@ -189,7 +193,7 @@ app.post("/reset-password", authenticateToken, async (req, res) => {
 	}
 });
 
-// verify-email
+// Verify Email
 app.post("/verify-email", authenticateToken, async (req, res) => {
 	try {
 		let errors = {};
@@ -208,19 +212,22 @@ app.post("/verify-email", authenticateToken, async (req, res) => {
 	}
 });
 
-// Test
-app.get("/", authenticateToken, async (req, res) => {
+// Profile
+app.get("/profile", authenticateToken, async (req, res) => {
 	try {
-		const getUser = await db.collection("users").get();
-		let user = [];
-		getUser.forEach((doc) => {
-			user.push(doc.data());
-		});
-		const userLogin = await getAuth().currentUser;
+		const { uid, email, emailVerified, displayName, isAnonymous, photoURL } =
+			await getAuth().currentUser;
+
+		const user = {
+			uid,
+			email,
+			emailVerified,
+			displayName,
+			isAnonymous,
+			photoURL,
+		};
 		res.status(200).json({
 			user,
-			message: `Hello`,
-			userLogin,
 		});
 	} catch (error) {
 		res.status(500).json({ message: error.message });
