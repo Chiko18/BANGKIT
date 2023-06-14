@@ -1,21 +1,23 @@
-const { onRequest } = require("firebase-functions/v2/https");
-const admin = require("firebase-admin");
-const app = require("express")();
-
-app.use(require("cors")());
-app.use(require("cookie-parser")());
-
-admin.initializeApp();
-
-const firebase = require("firebase/app");
-const {
+import { onRequest } from "firebase-functions/v2/https";
+import admin from "firebase-admin";
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import * as firebase from "firebase/app";
+import {
 	getAuth,
 	signInWithEmailAndPassword,
 	createUserWithEmailAndPassword,
 	sendPasswordResetEmail,
 	sendEmailVerification,
 	updateProfile,
-} = require("firebase/auth");
+} from "firebase/auth";
+
+const app = express();
+app.use(cors());
+app.use(cookieParser());
+
+admin.initializeApp();
 
 const firebaseConfig = {
 	apiKey: "AIzaSyClDXcqkOc3F_6eG5_Hc7E6lsUjvFpVDgQ",
@@ -234,4 +236,30 @@ app.get("/profile", authenticateToken, async (req, res) => {
 	}
 });
 
-exports.api = onRequest(app);
+// Update Profile & Photo
+app.put("/profile", authenticateToken, async (req, res) => {
+	const { name, address } = req.body;
+	try {
+		const datas = {
+			name,
+			address,
+		};
+		// firestore
+		const user = await db.doc(`/users/${req.user.email}`);
+		user.update(datas);
+		// current user
+		await updateProfile(getAuth().currentUser, {
+			displayName: name,
+		});
+
+		res.status(200).json({
+			message: "Data have been updated!",
+		});
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
+});
+
+// Update Email
+
+export const api = onRequest(app);
