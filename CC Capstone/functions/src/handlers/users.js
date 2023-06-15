@@ -2,7 +2,6 @@ const { admin, db } = require("../utils/admin.js");
 const firebaseConfig = require("../utils/firebaseConfig.js");
 const { validateSignup, validateLogin } = require("../utils/validator.js");
 
-const { getStorage } = require("firebase/storage");
 const firebase = require("firebase/app");
 const {
 	getAuth,
@@ -16,8 +15,6 @@ const {
 const { v4: uuidv4 } = require("uuid");
 
 firebase.initializeApp(firebaseConfig);
-
-const bucket = getStorage();
 
 exports.signupController = async (req, res) => {
 	const { name, email, password, confirmPassword, address } = req.body;

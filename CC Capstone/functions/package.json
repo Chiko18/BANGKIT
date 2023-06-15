@@ -13,7 +13,6 @@
   },
   "main": "./src/index.js",
   "dependencies": {
-    "@google-cloud/storage": "^6.11.0",
     "busboy": "^1.6.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -22,10 +21,7 @@
     "express-fileupload": "^1.4.0",
     "firebase": "^9.22.1",
     "firebase-admin": "^11.8.0",
-    "firebase-functions": "^4.4.1",
-    "fs": "^0.0.1-security",
-    "multer": "^1.4.4",
-    "uuidv4": "^6.2.13"
+    "firebase-functions": "^4.4.1"
   },
   "devDependencies": {
     "firebase-functions-test": "^3.1.0"
