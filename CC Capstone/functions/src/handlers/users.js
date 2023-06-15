@@ -1,5 +1,5 @@
 const { admin, db } = require("../utils/admin.js");
-const firebaseConfig = require("../utils/firebaseConfig.js");
+const firebaseConfig = require("../../firebaseConfig.js");
 const { validateSignup, validateLogin } = require("../utils/validator.js");
 
 const firebase = require("firebase/app");
