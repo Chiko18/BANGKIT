@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.dashboard.DashboardFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                android:layout_margin="30dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/blue">
+                        <ImageView
+                            android:id="@+id/iv_frg_dshbrd"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:src="@drawable/ic_person"
+                            android:layout_marginLeft="10dp"/>
+                        <TextView
+                            android:id="@+id/tv_saldo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Re-Waste Saldo"
+                            android:layout_below="@+id/iv_frg_dshbrd"
+                            android:textColor="@color/white"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="14sp"/>
+                        <LinearLayout
+                            android:id="@+id/nominal_saldo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="45dp"
+                            android:layout_below="@id/tv_saldo">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rp."
+                                android:textColor="@color/white"
+                                android:textSize="14sp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textSize="14sp"
+                                android:textColor="@color/white"/>
+
+
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_rw_point"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Re-Waste Point"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:layout_below="@id/iv_frg_dshbrd"
+                            android:layout_toRightOf="@id/tv_saldo"
+                            android:layout_marginLeft="40dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_jmlh_point"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:layout_below="@id/tv_saldo"
+                            android:layout_toRightOf="@+id/nominal_saldo"
+                            android:layout_marginLeft="120dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rating"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:layout_below="@+id/iv_frg_dshbrd"
+                            android:layout_toRightOf="@id/tv_rw_point"
+                            android:layout_marginLeft="40dp"
+                            />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_below="@+id/nominal_saldo"
+                            android:layout_marginLeft="10dp"
+                            >
+
+                            <Button
+                                android:id="@+id/btn_pembayaran"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pembayaran"
+                                android:layout_marginTop="40dp"
+                                android:backgroundTint="@color/colorAnackBarSuccess"
+                                />
+                            <Button
+                                android:id="@+id/btn_reward"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="MyREWARD"
+                                android:layout_marginTop="40dp"
+                                android:backgroundTint="@color/yellow_orange"
+                                android:layout_marginLeft="75dp"
+                                />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                android:layout_margin="30dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/grey_medium"
+                    android:paddingBottom="24dp"
+                    android:paddingLeft="24dp"
+                    android:orientation="vertical"
+                    android:paddingRight="24dp"
+                    android:paddingTop="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Sampah Saya"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Anda Belum Memiliki Sampah Saat Ini"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="12dp"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tambah Sampah"
+                        android:backgroundTint="@color/blue"
+                        android:layout_marginTop="40dp"
+                        android:layout_gravity="center"
+                        />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                android:layout_margin="30dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/grey_medium"
+                    android:paddingBottom="24dp"
+                    android:paddingLeft="24dp"
+                    android:orientation="vertical"
+                    android:paddingRight="24dp"
+                    android:paddingTop="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Transaksi Saya"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Anda Belum Memiliki Transaksi Saat Ini"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="12dp"/>
+
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
